@@ -1,0 +1,25 @@
+<launch>
+  <arg name="map" value="rm"/>
+  <arg name="path" value="/home/lab/catkin_ws/src/map"/>
+  
+  <master auto="start"/>
+  
+  <param name="/use_sim_time" value="true"/>
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg path)/map/$(arg map).yaml" respawn="false" />
+  
+  <!-- Run the Stage Simulator -->
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(arg path)/simulator/$(arg map).world" respawn="false" >
+    <remap from="base_scan" to="scan"/> 
+    <param name="base_watchdog_timeout" value="0.05"/>
+  </node>
+
+  <!-- Run the fake localization -->
+  <!--node name="fake_localization" pkg="fake_localization" type="fake_localization" respawn="false" /-->
+
+  <!-- Run the rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg path)/rviz/rm.rviz" />
+
+</launch>
+
