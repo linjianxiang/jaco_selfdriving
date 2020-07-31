@@ -1,0 +1,23 @@
+<launch>
+
+    <arg name="path" value="/home/linjian/workspaces/cartographer_ws/jaco_selfdriving/jaco_files"/>
+
+<remap from="map" to="/grid_map" /> 
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+    <rosparam file="$(arg path)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(arg path)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    
+    <rosparam file="$(arg path)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(arg path)/global_costmap_params.yaml" command="load" />
+    
+    <rosparam file="$(arg path)/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(arg path)/move_base_params.yaml" command="load" />
+    
+    <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+    
+    <remap from="odom" to="odometry/filtered/global1" />
+  </node>
+
+</launch>
